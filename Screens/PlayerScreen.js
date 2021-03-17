@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
-import { Slider } from 'react-native-elements';
+import Slider from '@react-native-community/slider';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+// import { Slider } from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/AntDesign';
-import TrackPlayer, { TrackPlayerEvents, useTrackPlayerEvents } from 'react-native-track-player';
+import TrackPlayer, { TrackPlayerEvents, useTrackPlayerEvents, useTrackPlayerProgress } from 'react-native-track-player';
 
 const PlayerScreen = ({ navigation, route }) => {
-    const [currectTrack, setCurrentTrack] = useState({})
     const [playerState, setPlayerState] = useState(null)
-    const [currentPos, setCurrentPosition] = useState(0)
-    const [duration, setDuration] = useState(0)
+    const [playLength, setPlayLength] = useState(0)
+    const [currentPos, setCurrentPos] = useState(0)
+    const { position, bufferedPosition, duration } = useTrackPlayerProgress(500, [TrackPlayer.STATE_PLAYING])
 
     const events = [
         TrackPlayerEvents.PLAYBACK_STATE,
@@ -28,7 +29,7 @@ const PlayerScreen = ({ navigation, route }) => {
         if (event.type === TrackPlayerEvents.PLAYBACK_METADATA_RECEIVED) {
             TrackPlayer.getDuration().then(res => {
                 console.log('Duration', res)
-                setDuration(res)
+                setPlayLength(res)
             })
         }
     });
@@ -133,6 +134,43 @@ const PlayerScreen = ({ navigation, route }) => {
         }
     }
 
+
+    const ProgressBar = () => {
+        // setCurrentPos(position)
+        return (
+            <View style={styles.sliderContainer}>
+                <Text style={styles.durationText}>{formatTime(position)}</Text>
+                <Slider
+                    style={styles.slider}
+                    maximumValue={0}
+                    value={position}
+                    maximumValue={duration}
+                    minimumTrackTintColor='#343434'
+                    maximumTrackTintColor='#a2a2a2'
+                    thumbTintColor='#343434' />
+                <Text style={styles.durationText}>{formatTime(duration)}</Text>
+            </View>
+        )
+    }
+
+    function formatTime(duration) {
+        // Hours, minutes and seconds
+        var hrs = ~~(duration / 3600);
+        var mins = ~~((duration % 3600) / 60);
+        var secs = ~~duration % 60;
+
+        // Output like "1:01" or "4:03:59" or "123:03:59"
+        var ret = "";
+
+        if (hrs > 0) {
+            ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+        }
+
+        ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+        ret += "" + secs;
+        return ret;
+    }
+
     return (
         <View style={styles.page}>
             <SpeakerName />
@@ -141,19 +179,7 @@ const PlayerScreen = ({ navigation, route }) => {
             <Text>{route.params.sermon.topic}</Text>
             <Text>{route.params.sermon.scripture}</Text>
             <SermonDescription sermon={route.params.sermon} />
-            <View style={styles.sliderContainer}>
-                <Text style={styles.durationText}>0:00</Text>
-                <Slider
-                    style={styles.slider}
-                    value={4}
-                    minimumValue={1}
-                    maximumValue={10}
-                    minimumTrackTintColor='#c9c9c9'
-                    maximumTrackTintColor='#a2a2a2'
-                    thumbTintColor='#c9c9c9'>
-                </Slider>
-                <Text style={styles.durationText}>9:00</Text>
-            </View>
+            <ProgressBar />
             <View style={styles.playerControl}>
                 <TouchableOpacity onPress={playStopAudio}>
                     <PlayIcon />

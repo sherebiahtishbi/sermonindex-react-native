@@ -44,7 +44,7 @@ export default HomeScreen
 
 const styles = StyleSheet.create({
     page: {
-        paddingTop: 70,
+        paddingTop: 30,
         flex: 1,
         backgroundColor: 'rgb(112, 111, 48)'
     },
