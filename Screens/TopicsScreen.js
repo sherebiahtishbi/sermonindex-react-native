@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Input } from 'react-native-elements';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -8,6 +8,20 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const TopicsScreen = ({ navigation }) => {
     const [topics, setTopics] = useState([]);
     var [filteredTopics, setFilteredTopics] = useState([])
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                return (
+                    <TouchableOpacity
+                        style={{ paddingRight: 10, backgroundColor: '#fff01' }}
+                        onPress={() => navigation.navigate("Home")}>
+                        <Icon name='home' size={25} />
+                    </TouchableOpacity>
+                )
+            }
+        })
+    }, [navigation])
 
     useEffect(() => {
         async function getData() {

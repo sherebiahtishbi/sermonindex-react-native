@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
+import { ActivityIndicator, StyleSheet, Text, View, Image } from 'react-native'
 import Slider from '@react-native-community/slider';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 // import { Slider } from 'react-native-elements';
 
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import TrackPlayer, { TrackPlayerEvents, useTrackPlayerEvents, useTrackPlayerProgress } from 'react-native-track-player';
 
 const PlayerScreen = ({ navigation, route }) => {
     const [playerState, setPlayerState] = useState(null)
-    const [playLength, setPlayLength] = useState(0)
-    const [currentPos, setCurrentPos] = useState(0)
+    const [speakerImage, setSpeakerImage] = useState('')
     const { position, bufferedPosition, duration } = useTrackPlayerProgress(500, [TrackPlayer.STATE_PLAYING])
 
     const events = [
@@ -29,10 +28,24 @@ const PlayerScreen = ({ navigation, route }) => {
         if (event.type === TrackPlayerEvents.PLAYBACK_METADATA_RECEIVED) {
             TrackPlayer.getDuration().then(res => {
                 console.log('Duration', res)
-                setPlayLength(res)
+                // setPlayLength(res)
             })
         }
     });
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                return (
+                    <TouchableOpacity
+                        style={{ paddingRight: 10, backgroundColor: '#fff01' }}
+                        onPress={() => navigation.navigate("Home")}>
+                        <Icon name='home' size={25} />
+                    </TouchableOpacity>
+                )
+            }
+        })
+    }, [navigation])
 
     useEffect(() => {
         TrackPlayer.setupPlayer().then(() => {
@@ -53,6 +66,14 @@ const PlayerScreen = ({ navigation, route }) => {
                     TrackPlayer.add([track])
                     playStopAudio()
                 })
+            var speakerimage = (route.params.speaker != undefined) ? route.params.speaker.speakerImage : ""
+            fetch(speakerimage, { redirect: 'error' }).then(res => {
+                console.log('fetched image > ', res.url.toString())
+                res.url.toString().indexOf('github') > 0 ? setSpeakerImage('') : setSpeakerImage(speakerimage)
+            }).catch(err => {
+                console.log('error fetching image > ', err)
+                setSpeakerImage(speakerimage)
+            })
         });
         return () => {
             TrackPlayer.destroy()
@@ -67,11 +88,15 @@ const PlayerScreen = ({ navigation, route }) => {
             TrackPlayer.play()
             console.log('Now Playing')
         }
-
     }
 
     const stopAudio = () => { TrackPlayer.stop() }
     const pauseAudio = () => { TrackPlayer.pause() }
+
+    const seekAudio = (value) => {
+        console.log('value')
+        TrackPlayer.seekTo(value)
+    }
 
     const SpeakerName = () => {
         var speakername = (route.params.speaker != null) ? route.params.speaker.speakerName : ""
@@ -83,16 +108,15 @@ const PlayerScreen = ({ navigation, route }) => {
     }
 
     const SpeakerImage = () => {
-        var speakerimage = (route.params.speaker != undefined) ? route.params.speaker.speakerImage : ""
-        console.log('Speaker Image > ', speakerimage)
-        if (speakerimage != undefined && speakerimage != "") {
+        if (speakerImage != undefined && speakerImage != "") {
             return <Image
-                source={{ uri: route.params.speaker.speakerImage }}
+                source={{ uri: speakerImage }}
                 style={{ height: 100, width: 100, marginVertical: 20 }}
                 defaultSource={require('../assets/sermonindex.jpg')} />
         } else {
             return <Image source={require('../assets/sermonindex.jpg')} style={{ height: 150, width: 150 }} />
         }
+
     }
 
     const SermonDescription = ({ sermon }) => {
@@ -105,7 +129,7 @@ const PlayerScreen = ({ navigation, route }) => {
         } else {
             return (
                 <View style={[styles.sermonDesc, styles.noDesc]}>
-                    <Text style={styles.emptyDesc}>Sermon description not available</Text>
+                    <Text style={styles.emptyDesc}></Text>
                 </View>
             )
         }
@@ -127,10 +151,14 @@ const PlayerScreen = ({ navigation, route }) => {
     }
 
     const PlayIcon = () => {
-        if (playerState === TrackPlayer.STATE_PLAYING) {
-            return (<Icon name='pausecircleo' size={60} />)
-        } else {
-            return (<Icon name='playcircleo' size={60} />)
+
+        switch (playerState) {
+            case TrackPlayer.STATE_PLAYING:
+                return (<Icon name='pause-circle' size={50} />)
+            case TrackPlayer.STATE_PAUSED:
+                return (<Icon name='play-circle' size={50} />)
+            default:
+                return <ActivityIndicator size="large" color="black" />
         }
     }
 
@@ -147,7 +175,10 @@ const PlayerScreen = ({ navigation, route }) => {
                     maximumValue={duration}
                     minimumTrackTintColor='#343434'
                     maximumTrackTintColor='#a2a2a2'
-                    thumbTintColor='#343434' />
+                    thumbTintColor='#343434'
+                    // onValueChange={(value) => seekAudio(value)}
+                    onSlidingComplete={(value) => seekAudio(value)}
+                />
                 <Text style={styles.durationText}>{formatTime(duration)}</Text>
             </View>
         )
@@ -196,7 +227,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#71702b',
         alignItems: 'center',
-        paddingTop: 30
+        paddingTop: 30,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     searchBox: {
         color: 'black',
@@ -224,9 +257,9 @@ const styles = StyleSheet.create({
     },
     sermonDesc: {
         alignItems: 'center',
-        textAlign: 'center',
+        justifyContent: 'center',
         flex: 3,
-        width: '95%',
+        // width: '95%',
         marginTop: 3,
         padding: 10,
         // backgroundColor: '#74732c',
@@ -238,8 +271,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignContent: 'space-around',
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingLeft: 0,
+        paddingRight: 0,
         paddingTop: 50,
     },
     durationText: {

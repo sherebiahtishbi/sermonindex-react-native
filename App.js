@@ -8,6 +8,8 @@ import TopicsScreen from './Screens/TopicsScreen'
 import ScriptureScreen from './Screens/ScriptureScreen'
 import SermonsScreen from './Screens/SermonsScreen'
 import PlayerScreen from './Screens/PlayerScreen'
+import { Button } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const screenStack = createStackNavigator()
 
@@ -28,7 +30,10 @@ export default function App() {
         <screenStack.Screen name="Topics" component={TopicsScreen} options={{ title: "Topics" }} />
         <screenStack.Screen name="Scriptures" component={ScriptureScreen} options={{ title: "Scripture" }} />
         <screenStack.Screen name="Sermons" component={SermonsScreen} options={({ route }) => ({ title: route.params.title })} />
-        <screenStack.Screen name="Player" component={PlayerScreen} options={({ route }) => ({ title: route.params.title })} />
+        <screenStack.Screen name="Player"
+          component={PlayerScreen}
+          options={({ navigation, route }) => ({ title: route.params.title })}
+        />
       </screenStack.Navigator>
     </NavigationContainer>
   );
