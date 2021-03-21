@@ -8,8 +8,6 @@ import TopicsScreen from './Screens/TopicsScreen'
 import ScriptureScreen from './Screens/ScriptureScreen'
 import SermonsScreen from './Screens/SermonsScreen'
 import PlayerScreen from './Screens/PlayerScreen'
-import { Button } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 const screenStack = createStackNavigator()
 
