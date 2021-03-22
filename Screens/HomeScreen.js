@@ -1,13 +1,11 @@
 import React from 'react'
+import { StatusBar } from 'react-native';
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SI_ICONS, SI_COLORS } from '../constants/config'
 
 const HomeScreen = ({ navigation }) => {
-
-
-
     const ModuleItem = ({ iconName, title, subtitle, onPress }) => {
         return (
             <TouchableOpacity style={styles.siModule} onPress={onPress}>
@@ -36,6 +34,7 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.page}>
+            <StatusBar backgroundColor={SI_COLORS.backgroundColor2} />
             <View style={{ backgroundColor: SI_COLORS.backgroundColor2 }}>
                 <Image source={require('../assets/sermonindex-top.png')} style={styles.logo} />
             </View>

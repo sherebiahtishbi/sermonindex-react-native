@@ -1,3 +1,5 @@
+import { Dimensions } from 'react-native';
+
 export const SI_COLORS = {
     backgroundColor1: 'rgba(112, 111, 48, 1)',
     backgroundColor2: '#7c7b3a',
@@ -18,11 +20,16 @@ export const SI_ICONS = {
     pause: 'pause-circle',
     speaker: 'user',
     topic: 'file',
-    scripture: 'book'
+    scripture: 'book',
+    info: 'info-circle',
+    close: 'close'
 };
 
+export const SI_DEVICE = {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height
+}
 
-
-const appSettings = { SI_COLORS, SI_ICONS };
+const appSettings = { SI_COLORS, SI_ICONS, SI_DEVICE };
 
 export default appSettings;

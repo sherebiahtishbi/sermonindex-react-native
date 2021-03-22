@@ -13,7 +13,7 @@ import { SI_ICONS, SI_COLORS } from './constants/config'
 const screenStack = createStackNavigator()
 
 const globalScreenstyle = {
-  headerStyle: { backgroundColor: SI_COLORS.backgroundColor2 },
+  headerStyle: { backgroundColor: SI_COLORS.backgroundColor2, elevation: 0 },
   headerTintColor: SI_COLORS.color2,
   headerTitleStyle: {
     fontWeight: '600',

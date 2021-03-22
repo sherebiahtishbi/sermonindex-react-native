@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, StatusBar } from 'react-native'
 import { Input } from 'react-native-elements';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -57,7 +57,8 @@ const ScriptureScreen = ({ navigation }) => {
 
     return (
         <View style={styles.page}>
-            <Text style={styles.infoText}>Tap on the scripture to list all the sermons by that scripture.</Text>
+            <StatusBar backgroundColor={SI_COLORS.backgroundColor2} />
+            {/* <Text style={styles.infoText}>Tap on the scripture to list all the sermons by that scripture.</Text> */}
             <View style={{ backgroundColor: SI_COLORS.color4, borderRadius: 10, marginHorizontal: 10, height: 50 }}>
                 <Input
                     placeholder='Search Scripture'

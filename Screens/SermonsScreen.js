@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, StatusBar } from 'react-native'
 import { Input } from 'react-native-elements';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -63,7 +63,8 @@ const SermonsScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.page}>
-            <Text style={styles.infoText}>Tap on the sermon to play the Sermon.</Text>
+            <StatusBar backgroundColor={SI_COLORS.backgroundColor2} />
+            {/* <Text style={styles.infoText}>Tap on the sermon to play the Sermon.</Text> */}
             <View style={{ backgroundColor: SI_COLORS.color4, borderRadius: 10, marginHorizontal: 10, height: 50 }}>
                 <Input
                     placeholder='Search Sermon'
@@ -88,7 +89,7 @@ const SermonsScreen = ({ navigation, route }) => {
                     }}
                 />
             </View>
-            <ScrollView style={styles.speakerList}>
+            <ScrollView style={styles.sermonList}>
                 {
                     (filterdSermons != undefined && filterdSermons.length > 0) ?
                         filterdSermons.map((sermon, index) => (
@@ -101,6 +102,7 @@ const SermonsScreen = ({ navigation, route }) => {
                                                 {
                                                     title: sermon.title,
                                                     sermon: sermon,
+                                                    mainCategory: route.params.sermonCategory,
                                                     speaker: {
                                                         speakerName: sermon.speaker_name,
                                                         speakerImage: url,
@@ -116,6 +118,7 @@ const SermonsScreen = ({ navigation, route }) => {
                                             title: sermon.title,
                                             sermon: sermon,
                                             speaker: speakerInfo,
+                                            mainCategory: route.params.sermonCategory
                                         }
                                     )
 
@@ -123,7 +126,7 @@ const SermonsScreen = ({ navigation, route }) => {
                             }}>
                                 <View style={styles.sermonBox} >
                                     <Icon name={SI_ICONS.play} size={30} color={SI_COLORS.color2} />
-                                    <Text style={styles.speakerTitle}>{sermon.title}</Text>
+                                    <Text style={styles.sermonTitle}>{sermon.title}</Text>
                                 </View>
                             </TouchableOpacity>
                         )) :
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
         backgroundColor: SI_COLORS.backgroundColor2,
         flex: 1
     },
-    speakerTitle: {
+    sermonTitle: {
         flex: 1,
         flexWrap: 'wrap',
         paddingLeft: 20,
@@ -173,7 +176,7 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: SI_COLORS.color2
     },
-    speakerList: {
+    sermonList: {
         padding: 10
     },
     awaiting: {
