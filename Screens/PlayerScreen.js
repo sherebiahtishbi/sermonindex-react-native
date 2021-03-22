@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { ActivityIndicator, StyleSheet, Text, View, Image } from 'react-native'
 import Slider from '@react-native-community/slider';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// import { Slider } from 'react-native-elements';
+import { SI_ICONS, SI_COLORS } from '../constants/config'
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TrackPlayer, { TrackPlayerEvents, useTrackPlayerEvents, useTrackPlayerProgress } from 'react-native-track-player';
@@ -38,9 +38,9 @@ const PlayerScreen = ({ navigation, route }) => {
             headerRight: () => {
                 return (
                     <TouchableOpacity
-                        style={{ paddingRight: 10, backgroundColor: '#fff01' }}
+                        style={{ paddingRight: 10, backgroundColor: '#fff01', marginRight: 20 }}
                         onPress={() => navigation.navigate("Home")}>
-                        <Icon name='home' size={25} />
+                        <Icon name={SI_ICONS.home} size={25} color={SI_COLORS.color2} />
                     </TouchableOpacity>
                 )
             }
@@ -123,8 +123,11 @@ const PlayerScreen = ({ navigation, route }) => {
         if (sermon.description != null && sermon.description != "") {
             return (
                 <View style={styles.sermonDesc}>
-                    <Text>{route.params.sermon.description}</Text>
+                    <Text style={{ alignSelf: 'center' }}>{route.params.sermon.description}</Text>
                 </View>
+                // <ScrollView contentContainerStyle={styles.sermonDesc}>
+                //     <Text style={{ alignSelf: 'center' }}>{route.params.sermon.description}</Text>
+                // </ScrollView>
             )
         } else {
             return (
@@ -173,9 +176,9 @@ const PlayerScreen = ({ navigation, route }) => {
                     maximumValue={0}
                     value={position}
                     maximumValue={duration}
-                    minimumTrackTintColor='#343434'
-                    maximumTrackTintColor='#a2a2a2'
-                    thumbTintColor='#343434'
+                    minimumTrackTintColor={SI_COLORS.minTrackTintColor}
+                    maximumTrackTintColor={SI_COLORS.maxTrackTintColor}
+                    thumbTintColor={SI_COLORS.thumbTintColor}
                     // onValueChange={(value) => seekAudio(value)}
                     onSlidingComplete={(value) => seekAudio(value)}
                 />
@@ -207,8 +210,8 @@ const PlayerScreen = ({ navigation, route }) => {
             <SpeakerName />
             <SermonTitle />
             <SpeakerImage />
-            <Text>{route.params.sermon.topic}</Text>
-            <Text>{route.params.sermon.scripture}</Text>
+            <Text style={{ color: SI_COLORS.color2, paddingHorizontal: 10 }}>{route.params.sermon.topic}</Text>
+            <Text style={{ color: SI_COLORS.color2, paddingHorizontal: 10 }} > {route.params.sermon.scripture}</Text>
             <SermonDescription sermon={route.params.sermon} />
             <ProgressBar />
             <View style={styles.playerControl}>
@@ -239,33 +242,39 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         alignSelf: 'center',
         textAlign: 'center',
-        paddingHorizontal: 10
+        paddingHorizontal: 20,
+        color: SI_COLORS.color2
     },
     speakerTitle: {
         fontSize: 18,
         fontWeight: '600',
         alignSelf: 'center',
-        marginBottom: 10
+        marginBottom: 10,
+        paddingHorizontal: 20,
+        color: SI_COLORS.color2
     },
     noDesc: {
         alignItems: 'center',
         justifyContent: 'center',
+        color: SI_COLORS.color2
     },
     emptyDesc: {
         fontSize: 24,
-        fontWeight: '400'
+        fontWeight: '400',
+        color: SI_COLORS.color2
     },
     sermonDesc: {
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 3,
-        // width: '95%',
+        alignSelf: 'center',
+        height: 100,
         marginTop: 3,
         padding: 10,
-        // backgroundColor: '#74732c',
+        color: SI_COLORS.color2
     },
     slider: {
         flex: 3,
+        // transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }]
     },
     sliderContainer: {
         flexDirection: 'row',
@@ -277,9 +286,10 @@ const styles = StyleSheet.create({
     },
     durationText: {
         flex: 1,
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '400',
-        textAlign: 'center'
+        textAlign: 'center',
+        color: SI_COLORS.color2
     },
     playerControl: {
         flex: 2,

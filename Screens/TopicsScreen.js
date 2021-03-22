@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Input } from 'react-native-elements';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { SI_ICONS, SI_COLORS } from '../constants/config'
 
 const TopicsScreen = ({ navigation }) => {
     const [topics, setTopics] = useState([]);
@@ -14,9 +14,9 @@ const TopicsScreen = ({ navigation }) => {
             headerRight: () => {
                 return (
                     <TouchableOpacity
-                        style={{ paddingRight: 10, backgroundColor: '#fff01' }}
+                        style={{ paddingRight: 10, backgroundColor: '#fff01', marginRight: 20 }}
                         onPress={() => navigation.navigate("Home")}>
-                        <Icon name='home' size={25} />
+                        <Icon name={SI_ICONS.home} size={25} color={SI_COLORS.color2} />
                     </TouchableOpacity>
                 )
             }
@@ -58,24 +58,28 @@ const TopicsScreen = ({ navigation }) => {
     return (
         <View style={styles.page}>
             <Text style={styles.infoText}>Tap on the topic to list all the sermons by that topic.</Text>
-            <Input
-                placeholder='Search Topic'
-                leftIcon={{ type: 'font-awesome', name: 'search' }}
-                inputStyle={styles.searchBox}
-                onChangeText={text => {
-                    if (text.length > 0) {
-                        filteredTopics = [];
-                        topics.forEach(topic => {
-                            if (topic[0].toLowerCase().indexOf(text.toLowerCase()) >= 0) {
-                                filteredTopics.push(topic)
-                            }
-                        })
-                        setFilteredTopics(filteredTopics)
-                    } else {
-                        setFilteredTopics(topics)
-                    }
-                }}
-            />
+            <View style={{ backgroundColor: SI_COLORS.color4, borderRadius: 10, marginHorizontal: 10, height: 50 }}>
+                <Input
+                    placeholder='Search Topic'
+                    placeholderTextColor={SI_COLORS.homeIconColor1}
+                    leftIcon={{ type: 'font-awesome', name: 'search', color: SI_COLORS.homeIconColor1 }}
+                    inputStyle={styles.searchBox}
+                    inputContainerStyle={{ borderBottomWidth: 0 }}
+                    onChangeText={text => {
+                        if (text.length > 0) {
+                            filteredTopics = [];
+                            topics.forEach(topic => {
+                                if (topic[0].toLowerCase().indexOf(text.toLowerCase()) >= 0) {
+                                    filteredTopics.push(topic)
+                                }
+                            })
+                            setFilteredTopics(filteredTopics)
+                        } else {
+                            setFilteredTopics(topics)
+                        }
+                    }}
+                />
+            </View>
             <ScrollView style={styles.topicList}>
                 {
                     (filteredTopics != undefined && filteredTopics.length > 0) ?
@@ -86,7 +90,7 @@ const TopicsScreen = ({ navigation }) => {
                                     { title: formatName(topic[0]), apiUrl: topic[1], sermonCategory: 'Topic' })
                             }}>
                                 <View style={styles.topicBox} >
-                                    <Icon name='file' size={30} />
+                                    <Icon name={SI_ICONS.topic} size={25} color={SI_COLORS.color4} />
                                     <Text style={styles.topicTitle}> {formatName(topic[0])}</Text>
                                 </View>
                             </TouchableOpacity>
@@ -105,7 +109,7 @@ export default TopicsScreen
 const styles = StyleSheet.create({
     page: {
         flex: 1,
-        backgroundColor: '#71702b'
+        backgroundColor: SI_COLORS.backgroundColor2
     },
     searchBox: {
         color: 'black',
@@ -119,20 +123,23 @@ const styles = StyleSheet.create({
     topicBox: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: 75,
-        marginTop: 3,
+        marginTop: 5,
         padding: 10,
-        borderWidth: .4,
-        // borderColor: 'black',
-        borderRadius: 5,
-        backgroundColor: '#646400',
+        borderTopWidth: .1,
+        borderBottomWidth: .6,
+        borderRightWidth: .3,
+        borderRadius: 10,
+        borderColor: SI_COLORS.color4,
+        backgroundColor: SI_COLORS.backgroundColor2,
+        flex: 1
     },
     topicTitle: {
         flex: 1,
         flexWrap: 'wrap',
         paddingLeft: 20,
         fontSize: 20,
-        fontWeight: '400'
+        fontWeight: '400',
+        color: SI_COLORS.color2
     },
     topicList: {
         padding: 10

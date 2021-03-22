@@ -8,14 +8,15 @@ import TopicsScreen from './Screens/TopicsScreen'
 import ScriptureScreen from './Screens/ScriptureScreen'
 import SermonsScreen from './Screens/SermonsScreen'
 import PlayerScreen from './Screens/PlayerScreen'
+import { SI_ICONS, SI_COLORS } from './constants/config'
 
 const screenStack = createStackNavigator()
 
 const globalScreenstyle = {
-  headerStyle: { backgroundColor: 'rgba(112, 111, 48, 1)' },
-  headerTintColor: '#000',
+  headerStyle: { backgroundColor: SI_COLORS.backgroundColor2 },
+  headerTintColor: SI_COLORS.color2,
   headerTitleStyle: {
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
 }
 

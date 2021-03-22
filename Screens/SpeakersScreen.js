@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Input } from 'react-native-elements';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { SI_ICONS, SI_COLORS } from '../constants/config'
 
 
 const SpeakersScreen = ({ navigation }) => {
@@ -14,9 +15,9 @@ const SpeakersScreen = ({ navigation }) => {
             headerRight: () => {
                 return (
                     <TouchableOpacity
-                        style={{ paddingRight: 10, backgroundColor: '#fff01' }}
+                        style={{ paddingRight: 10, backgroundColor: '#fff01', marginRight: 20 }}
                         onPress={() => navigation.navigate("Home")}>
-                        <Icon name='home' size={25} />
+                        <Icon name={SI_ICONS.home} size={25} color={SI_COLORS.color2} />
                     </TouchableOpacity>
                 )
             }
@@ -58,26 +59,30 @@ const SpeakersScreen = ({ navigation }) => {
     return (
         <View style={styles.page}>
             <Text style={styles.infoText}>Tap on the speaker to list all the sermons by that speaker.</Text>
-            <Input
-                placeholder='Search Speaker'
-                leftIcon={{ type: 'font-awesome', name: 'search' }}
-                inputStyle={styles.searchBox}
-                onChangeText={text => {
-                    if (text.length > 0) {
-                        filterdSpeakers = [];
-                        speakers.forEach(speaker => {
-                            if (speaker[0].toLowerCase().indexOf(text.toLowerCase()) >= 0) {
-                                if (speaker[0].indexOf('book') < 0) {
-                                    filterdSpeakers.push(speaker)
+            <View style={{ backgroundColor: SI_COLORS.color4, borderRadius: 10, marginHorizontal: 10, height: 50 }}>
+                <Input
+                    placeholder='Search Speaker'
+                    placeholderTextColor={SI_COLORS.homeIconColor1}
+                    leftIcon={{ type: 'font-awesome', name: 'search', color: SI_COLORS.homeIconColor1 }}
+                    inputStyle={styles.searchBox}
+                    inputContainerStyle={{ borderBottomWidth: 0, }}
+                    onChangeText={text => {
+                        if (text.length > 0) {
+                            filterdSpeakers = [];
+                            speakers.forEach(speaker => {
+                                if (speaker[0].toLowerCase().indexOf(text.toLowerCase()) >= 0) {
+                                    if (speaker[0].indexOf('book') < 0) {
+                                        filterdSpeakers.push(speaker)
+                                    }
                                 }
-                            }
-                        })
-                        setFilterdSpeakers(filterdSpeakers)
-                    } else {
-                        setFilterdSpeakers(speakers)
-                    }
-                }}
-            />
+                            })
+                            setFilterdSpeakers(filterdSpeakers)
+                        } else {
+                            setFilterdSpeakers(speakers)
+                        }
+                    }}
+                />
+            </View>
             <ScrollView style={styles.speakerList}>
                 {
                     (filterdSpeakers != undefined && filterdSpeakers.length > 0) ?
@@ -88,7 +93,7 @@ const SpeakersScreen = ({ navigation }) => {
                                     { title: formatName(speaker[0]), apiUrl: speaker[1], sermonCategory: 'Speaker' })
                             }}>
                                 <View style={styles.speakerBox} >
-                                    <Icon name='user' size={30} />
+                                    <Icon name={SI_ICONS.speaker} size={25} color={SI_COLORS.color4} />
                                     <Text style={styles.speakerTitle}> {formatName(speaker[0])}</Text>
                                 </View>
                             </TouchableOpacity>
@@ -107,10 +112,12 @@ export default SpeakersScreen
 const styles = StyleSheet.create({
     page: {
         flex: 1,
-        backgroundColor: '#71702b'
+        // backgroundColor: '#71702b'
+        backgroundColor: SI_COLORS.backgroundColor2
     },
     searchBox: {
-        color: 'black',
+        color: SI_COLORS.homeIconColor1,
+        borderBottomWidth: 0,
     },
     infoText: {
         fontSize: 16,
@@ -118,30 +125,26 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         padding: 10
     },
-    speakerShadow: {
-        shadowColor: 'rgba(0,0,0, .4)', // IOS
-        shadowOffset: { height: 1, width: 1 }, // IOS
-        shadowOpacity: 1, // IOS
-        shadowRadius: 1, //IOS
-        elevation: 5
-    },
     speakerBox: {
         flexDirection: 'row',
         alignItems: 'center',
-        height: 75,
-        marginTop: 3,
+        marginTop: 5,
         padding: 10,
-        borderWidth: .4,
-        // borderColor: 'black',
-        borderRadius: 5,
-        backgroundColor: '#646400',
+        borderTopWidth: .1,
+        borderBottomWidth: .6,
+        borderRightWidth: .3,
+        borderRadius: 10,
+        borderColor: SI_COLORS.color4,
+        backgroundColor: SI_COLORS.backgroundColor2,
+        flex: 1
     },
     speakerTitle: {
         flex: 1,
         flexWrap: 'wrap',
         paddingLeft: 20,
-        fontSize: 20,
-        fontWeight: '400'
+        fontSize: 18,
+        fontWeight: '400',
+        color: SI_COLORS.color2
     },
     speakerList: {
         padding: 10
