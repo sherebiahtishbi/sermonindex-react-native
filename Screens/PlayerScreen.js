@@ -280,12 +280,13 @@ const PlayerScreen = ({ navigation, route }) => {
                     <View style={{
                         height: SI_DEVICE.height - 200,
                         width: SI_DEVICE.width - 100,
-                        backgroundColor: '#87852b',
+                        backgroundColor: SI_COLORS.backgroundColor2,
                         borderRadius: 15,
                         alignItems: 'center',
                         padding: 20,
                         borderWidth: 1,
-                        borderColor: SI_COLORS.color1,
+                        borderColor: SI_COLORS.color3,
+                        borderRadius: 10,
                         elevation: 8
                     }}>
                         <Text style={{ fontSize: 20, fontWeight: '400', color: SI_COLORS.color2 }}>Sermon Description</Text>

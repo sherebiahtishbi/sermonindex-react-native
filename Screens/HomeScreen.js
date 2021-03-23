@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         width: '70%',
         alignSelf: 'center',
         borderWidth: 1,
-        borderColor: 'rgba(0,0,0,.2)',
+        borderColor: SI_COLORS.color3,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
